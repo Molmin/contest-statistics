@@ -1,0 +1,27 @@
+{
+  "name": "contest-statistics",
+  "version": "1.0.0",
+  "main": "build.ts",
+  "scripts": {
+    "build": "tsc && node build.js",
+    "crawl": "tsc && node crawl.js"
+  },
+  "keywords": [
+    "contest",
+    "oi",
+    "typst",
+    "statistics"
+  ],
+  "author": "Milmon <milmon@qq.com>",
+  "license": "AGPL-3.0-only",
+  "description": "",
+  "dependencies": {
+    "fs-extra": "^11.2.0",
+    "superagent": "^9.0.1",
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/superagent": "^8.1.6"
+  }
+}
