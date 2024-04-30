@@ -24,6 +24,8 @@ export interface Submission {
 export class Contest {
     problems: Array<Problem> = []
     submissions: Array<Submission> = []
+    start_time = 0
+    end_time = 0
     user_count = 0
 
     constructor(file: string) {
@@ -31,6 +33,10 @@ export class Contest {
         const users = new Set()
         for (const line of data) {
             const values = line.split(',')
+            if (values.length === 2) {
+                this.start_time = +values[0]
+                this.end_time = +values[1]
+            }
             if (values.length === 3) {
                 this.problems.push({ id: values[0], title: values[1], full_score: +values[2] })
             }
@@ -55,5 +61,9 @@ export class Contest {
             users.add(submission.submitter)
         }
         this.user_count = users.size
+    }
+
+    count_submission(fn: (submission: Submission) => boolean) {
+        return this.submissions.filter(fn).length
     }
 }

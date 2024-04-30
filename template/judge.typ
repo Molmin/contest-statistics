@@ -2,7 +2,7 @@
 
 下面展示的是本次比赛所有组别的评测数据。
 
-本次比赛共产生 $100$ 次提交，其中 $80$ 次编译通过，$30$ 次答案正确。
+本次比赛共产生 ${{ count_submission }}$ 次提交，其中 ${{ count_submission_compile_successfully }}$ 次编译通过，${{ count_submission_ac }}$ 次答案正确，共评测了 ${{ judge_testcase_count }}$ 个测试点，忽略了 ${{ judge_testcase_ignore_count }}$ 个测试点，选手代码运行时间总计 ${{ judge_sum_time }}$ 秒。
 
 本次比赛提交状态分布如下图所示：
 
@@ -12,20 +12,20 @@
 
   chart.piechart(
     (
-      ([100 AC], 24),
-      ([30 WA], 31),
-      ([40 TLE], 24),
-      ([50 MLE], 31),
-      ([10 RE], 31),
-      ([10 CE], 31),
+      ([{{ count_AC }} AC], {{ rate_AC }}),
+      ([{{ count_WA }} WA], {{ rate_WA }}),
+      ([{{ count_TLE }} TLE], {{ rate_TLE }}),
+      ([{{ count_MLE }} MLE], {{ rate_MLE }}),
+      ([{{ count_RE }} RE], {{ rate_RE }}),
+      ([{{ count_CE }} CE], {{ rate_CE }}),
     ),
     value-key: 1,
     label-key: 0,
     radius: 2,
     slice-style: (green, red, orange, purple, rgb(115, 192, 222), yellow),
     inner-radius: 0,
-    inner-label: (content: (value, label) => [#text(white, label)], radius: 120%),
-    outer-label: (content: (value, label) => [#text(black, str(value) + "%")], radius: 115%),
+    inner-label: (content: (value, label) => [#text(str(value) + "%")], radius: 120%),
+    outer-label: (content: (value, label) => [#text(black, label)], radius: 115%),
   )
 })
 
@@ -33,29 +33,15 @@
 
 #cetz.canvas(length: 1cm, {
   import cetz.plot
-  let judge_count_2024 = (0, 10, 20, 30, 40, 50, 60, 70, 30)
-  let judge_count_2023 = (0, 5, 70, 30, 20, 40, 30, 80, 10)
+  let judge_count_2024 = ({{ 2024.judge_count }})
+  let judge_count_2023 = ({{ 2023.judge_count }})
   plot.plot(
     size: (14, 5),
     x-label: [时间（分钟）],
-    x-tick-step: 30,
+    x-tick-step: 15,
     y-label: [每 10 分钟评测量（次）],
-    y-tick-step: 10,
-    // y2-label: [最高分],
-    // y2-tick-step: 100,
+    y-tick-step: 50,
     {
-      // plot.add(
-      //   style: judge_count_style,
-      //   domain: (0, 180),
-      //   axes: ("x", "y2"),
-      //   (x) => 0,
-      // )
-      // plot.add(
-      //   style: judge_count_style,
-      //   domain: (1, 2),
-      //   axes: ("x", "y2"),
-      //   (x) => 100,
-      // )
       let i = 1
       while i <= 180 {
         plot.add(
@@ -84,14 +70,14 @@
 
 #cetz.canvas(length: 1cm, {
   import cetz.plot
-  let judge_wait_2024 = (0, 10, 20, 30, 40, 50, 60, 70, 30)
-  let judge_wait_2023 = (0, 5, 70, 30, 20, 40, 30, 80, 10)
+  let judge_wait_2024 = ({{ 2024.judge_wait }})
+  let judge_wait_2023 = ({{ 2023.judge_wait }})
   plot.plot(
     size: (14, 5),
     x-label: [时间（分钟）],
-    x-tick-step: 30,
+    x-tick-step: 15,
     y-label: [平均排队等候时间（秒）],
-    y-tick-step: 5,
+    y-tick-step: 25,
     {
       let i = 1
       while i <= 180 {
