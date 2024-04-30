@@ -48,7 +48,7 @@
     x-label: [时间（分钟）],
     x-tick-step: 15,
     y-label: [分数],
-    y-tick-step: 100,
+    y-tick-step: {{ score_step }},
     {
       let i = 1
       while i <= {{ contest_time_length }} {

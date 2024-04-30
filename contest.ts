@@ -66,6 +66,14 @@ export class Contest {
         this.user_count = users.size
     }
 
+    fullScore(id: string) {
+        return this.problems.filter((problem) => problem.id === id)[0].full_score
+    }
+    get scoreGrad() {
+        const full = sum(this.problems.map((problem) => problem.full_score))
+        return full > 5000 ? 1000 : 100
+    }
+
     count_submission(fn: (submission: Submission) => boolean) {
         return this.submissions.filter(fn).length
     }
@@ -79,7 +87,7 @@ export class Contest {
                 if (!score[submission.submitter]) score[submission.submitter] = {}
                 score[submission.submitter][submission.problem] = Math.max(
                     score[submission.submitter][submission.problem] || 0,
-                    submission.score,
+                    submission.score / 100 * this.fullScore(submission.problem),
                 )
                 j++
             }
@@ -98,16 +106,16 @@ export class Contest {
                 if (!score[submission.submitter]) score[submission.submitter] = {}
                 score[submission.submitter][submission.problem] = Math.max(
                     score[submission.submitter][submission.problem] || 0,
-                    submission.score,
+                    submission.score / 100 * this.fullScore(submission.problem),
                 )
                 j++
             }
             for (const user in score) {
                 const s = sum(Object.entries(score[user]).map((x) => x[1]))
-                while (max_score < Math.ceil(s / 100)) {
+                while (max_score < Math.ceil(s / this.scoreGrad)) {
                     max_score++
                     result.push([
-                        `$[${max_score * 100 - 99}, ${max_score * 100}]$`,
+                        `$[${max_score * this.scoreGrad - (this.scoreGrad - 1)}, ${max_score * this.scoreGrad}]$`,
                         `#text(\"${user}\")`,
                         `#text(\"${i} 分钟\")`,
                         '0',
@@ -117,7 +125,7 @@ export class Contest {
         }
         for (const user in score) {
             const s = sum(Object.entries(score[user]).map((x) => x[1]))
-            for (let t = 0; t < Math.ceil(s / 100); t++) result[t][3] = (+result[t][3] + 1).toString()
+            for (let t = 0; t < Math.ceil(s / this.scoreGrad); t++) result[t][3] = (+result[t][3] + 1).toString()
         }
         return result.reverse()
     }
@@ -129,7 +137,7 @@ export class Contest {
             if (!score[submission.submitter]) score[submission.submitter] = {}
             score[submission.submitter][submission.problem] = Math.max(
                 score[submission.submitter][submission.problem] || 0,
-                submission.score,
+                submission.score / 100 * this.fullScore(submission.problem),
             )
             result[submission.submitter] = sum(Object.entries(score[submission.submitter]).map((x) => x[1]))
         }

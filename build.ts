@@ -56,6 +56,7 @@ writeFileSync('dist/result.typ', [
                 level_name: contestId.endsWith('t') ? '提高' : contestId.endsWith('p') ? '普及' : '入门',
                 level_problems_count: contest.problems.length,
                 best_user: ranking[0][1],
+                score_step: contest.scoreGrad,
                 max_score_value: max_score[max_score.length - 1],
                 average_score_value: average_score[average_score.length - 1],
                 ranking: ranking.map((line, index) => `    [${index + 1}], [#text(\"${line[0]}\")], [${line[1]}],`).join('\n'),
