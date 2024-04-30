@@ -11,7 +11,7 @@ export function average(a: number[]) {
 
 export function grow_rate(from: number, to: number) {
     if (from === 0) return `0.00%`
-    else return (to / from - 1).toFixed(2) + '%'
+    else return ((to / from - 1) * 100).toFixed(2) + '%'
 }
 
 export function range(l: number, r: number) {
