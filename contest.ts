@@ -126,7 +126,7 @@ export class Contest {
         const result: Record<string, number> = {}
         const score: Record<string, Record<string, number>> = {}
         for (const submission of this.submissions) {
-            if(!score[submission.submitter]) score[submission.submitter] = {}
+            if (!score[submission.submitter]) score[submission.submitter] = {}
             score[submission.submitter][submission.problem] = Math.max(
                 score[submission.submitter][submission.problem] || 0,
                 submission.score,
@@ -135,23 +135,39 @@ export class Contest {
         }
         return Object.entries(result).sort((x, y) => y[1] - x[1]).slice(0, 5)
     }
-    getSubmissionCountRanking() {
+    getSubmissionCountRanking(id = 'all') {
         const total: Record<string, number> = {}
         for (const submission of this.submissions) {
+            if (id !== 'all' && submission.problem !== id) continue
             total[submission.submitter] = (total[submission.submitter] || 0) + 1
         }
         return Object.entries(total).sort((x, y) => y[1] - x[1]).slice(0, 5)
     }
-    getSubmissionCodeLengthRanking() {
+    getSubmissionCodeLengthRanking(id = 'all') {
         const total: Record<string, number> = {}
         for (const submission of this.submissions) {
-            total[submission.submitter] = (total[submission.submitter] || 0) + submission.codeSize
+            if (id !== 'all' && (submission.problem !== id || submission.status !== 'AC')) continue
+            if (id === 'all') total[submission.submitter] = (total[submission.submitter] || 0) + submission.codeSize
+            else total[submission.submitter] = total[submission.submitter]
+                ? Math.min(total[submission.submitter], submission.codeSize)
+                : submission.codeSize
         }
-        return Object.entries(total).sort((x, y) => y[1] - x[1]).slice(0, 5)
+        return Object.entries(total).sort((x, y) => id !== 'all' ? x[1] - y[1] : y[1] - x[1]).slice(0, 5)
+    }
+    getBestAlgorithmRanking(id: string) {
+        const total: Record<string, [number, number]> = {}
+        for (const submission of this.submissions) {
+            if (submission.problem !== id || submission.status !== 'AC') continue
+            if (!total[submission.submitter] || total[submission.submitter][0] > submission.maxTime
+                || (total[submission.submitter][0] === submission.maxTime && total[submission.submitter][1] > submission.maxMemory)) {
+                total[submission.submitter] = [submission.maxTime, submission.maxMemory]
+            }
+        }
+        return Object.entries(total).sort((x, y) => x[1][0] !== y[1][0] ? x[1][0] - y[1][0] : x[1][1] - y[1][1]).slice(0, 5)
     }
 
     getProblemDatas() {
-        return this.problems.map((problem) => '  [' + [
+        return this.problems.map((problem) => '    [' + [
             problem.id, problem.full_score, `#text(\"${problem.title}\")`,
             this.users.filter((user) => this.count_submission((doc) => doc.submitter === user && doc.problem === problem.id && doc.status === 'AC')).length,
             `#text(\"${(this.users.filter((user) => this.count_submission((doc) => doc.submitter === user && doc.problem === problem.id && doc.status === 'AC')).length / this.user_count * 100).toFixed(2)}%\")`,

@@ -58,7 +58,7 @@ writeFileSync('dist/result.typ', [
                 best_user: ranking[0][1],
                 max_score_value: max_score[max_score.length - 1],
                 average_score_value: average_score[average_score.length - 1],
-                ranking: ranking.map((line, index) => `  [${index + 1}], [#text(\"${line[0]}\")], [${line[1]}],`).join('\n'),
+                ranking: ranking.map((line, index) => `    [${index + 1}], [#text(\"${line[0]}\")], [${line[1]}],`).join('\n'),
                 user_count: contest.user_count,
                 submission_count: contest.submissions.length,
                 submission_code_length: (sum(contest.submissions.map((doc) => doc.codeSize)) / 1024 / 1024).toFixed(3),
@@ -71,9 +71,9 @@ writeFileSync('dist/result.typ', [
                 ...Object.fromEntries(submission_status.map((status) => [`rate_${status}`, (contest.count_submission((doc) => doc.status === status) / contest.count_submission(() => true) * 100).toFixed(0)])),
                 max_score: max_score.join(', '),
                 average_score: average_score.join(', '),
-                score_distribution: contest.getScoreDistribution().map((line) => `  ${line.map((column) => `[${column}]`).join(', ')},`).join('\n'),
-                submission_count_ranking: contest.getSubmissionCountRanking().map((line, index) => `  [${index + 1}], [#text(\"${line[0]}\")], [${line[1]}],`).join('\n'),
-                submission_code_length_ranking: contest.getSubmissionCodeLengthRanking().map((line, index) => `  [${index + 1}], [#text(\"${line[0]}\")], [#text(\"${(line[1] / 1024).toFixed(2)} KiB\")],`).join('\n'),
+                score_distribution: contest.getScoreDistribution().map((line) => `    ${line.map((column) => `[${column}]`).join(', ')},`).join('\n'),
+                submission_count_ranking: contest.getSubmissionCountRanking().map((line, index) => `    [${index + 1}], [#text(\"${line[0]}\")], [${line[1]}],`).join('\n'),
+                submission_code_length_ranking: contest.getSubmissionCodeLengthRanking().map((line, index) => `    [${index + 1}], [#text(\"${line[0]}\")], [#text(\"${(line[1] / 1024).toFixed(2)} KiB\")],`).join('\n'),
                 problem_datas: contest.getProblemDatas(),
             }),
             ...contest.problems.map((problem) => render('problem.typ', {
@@ -94,7 +94,10 @@ writeFileSync('dist/result.typ', [
                 average_score: average(contest.users.map((user) => Math.max(...contest.submissions.filter((doc) => doc.problem === problem.id && doc.submitter === user).map((doc) => doc.score), 0, 0))).toFixed(2),
                 max_score: Math.max(...contest.users.map((user) => Math.max(...contest.submissions.filter((doc) => doc.problem === problem.id && doc.submitter === user).map((doc) => doc.score), 0, 0))),
                 ...Object.fromEntries(submission_status.map((status) => [`count_${status}`, contest.count_submission((doc) => doc.status === status && doc.problem === problem.id)])),
-                ...Object.fromEntries(submission_status.map((status) => [`rate_${status}`, (contest.count_submission((doc) => doc.status === status && doc.problem === problem.id) / contest.count_submission(() => true) * 100).toFixed(0)])),
+                ...Object.fromEntries(submission_status.map((status) => [`rate_${status}`, (contest.count_submission((doc) => doc.status === status && doc.problem === problem.id) / contest.count_submission((doc) => doc.problem === problem.id) * 100).toFixed(0)])),
+                submission_count_ranking: contest.getSubmissionCountRanking(problem.id).map((line, index) => `    [${index + 1}], [#text(\"${line[0]}\")], [${line[1]}],`).join('\n'),
+                code_length_ranking: contest.getSubmissionCodeLengthRanking(problem.id).map((line, index) => `    [${index + 1}], [#text(\"${line[0]}\")], [${(+line[1] / 1024).toFixed(2)} KiB],`).join('\n'),
+                best_algo_ranking: contest.getBestAlgorithmRanking(problem.id).map((line, index) => `    [${index + 1}], [#text(\"${line[0]}\")], [${line[1][0].toFixed(2)} ms], [${(+line[1][1] / 1024).toFixed(2)} KiB],`).join('\n'),
             }))
         ]
     })
