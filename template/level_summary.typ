@@ -1,6 +1,16 @@
 = {{ level_name }}组数据统计
 
-在{{ level_name }}组的比赛中共有 ${{ level_problems_count }}$ 道试题，共 ${{ user_count }}$ 名选手产生了代码总长为 ${{ submission_code_length }}$ MiB 的 ${{ submission_count }}$ 次提交，其中 ${{ count_submission_compile_successfully }}$ 次编译通过，${{ count_submission_ac }}$ 次答案正确，共评测了 ${{ judge_testcase_count }}$ 个测试点，忽略了 ${{ judge_testcase_ignore_count }}$ 个测试点，选手代码运行时间总计 ${{ judge_sum_time }}$ 小时。
+{{ level_name }}组的比赛时长 {{ contest_time_length_hour }} 小时，其中共有 ${{ level_problems_count }}$ 道试题，共 ${{ user_count }}$ 名选手产生了代码总长为 ${{ submission_code_length }}$ MiB 的 ${{ submission_count }}$ 次提交，其中 ${{ count_submission_compile_successfully }}$ 次编译通过，${{ count_submission_ac }}$ 次答案正确，共评测了 ${{ judge_testcase_count }}$ 个测试点，忽略了 ${{ judge_testcase_ignore_count }}$ 个测试点，选手代码运行时间总计 ${{ judge_sum_time }}$ 小时，最高分为选手 {{ best_user }} 的 {{ max_score_value }} 分，平均分为 {{ average_score_value }} 分。
+
+最终前十名的选手如下表：
+
+#figure(
+  table(
+    columns: 3,
+    [排名], [选手], [总分],
+{{ ranking }}
+  ),
+)
 
 本次比赛提交状态分布如下图所示：
 
@@ -19,7 +29,7 @@
     ),
     value-key: 1,
     label-key: 0,
-    radius: 3,
+    radius: 2.8,
     slice-style: (green, red, orange, purple, rgb(115, 192, 222), yellow),
     inner-radius: 0,
     inner-label: (content: (value, label) => [#text(str(value) + "%")], radius: 120%),

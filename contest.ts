@@ -122,6 +122,19 @@ export class Contest {
         return result.reverse()
     }
 
+    getRanking() {
+        const result: Record<string, number> = {}
+        const score: Record<string, Record<string, number>> = {}
+        for (const submission of this.submissions) {
+            if(!score[submission.submitter]) score[submission.submitter] = {}
+            score[submission.submitter][submission.problem] = Math.max(
+                score[submission.submitter][submission.problem] || 0,
+                submission.score,
+            )
+            result[submission.submitter] = sum(Object.entries(score[submission.submitter]).map((x) => x[1]))
+        }
+        return Object.entries(result).sort((x, y) => y[1] - x[1]).slice(0, 5)
+    }
     getSubmissionCountRanking() {
         const total: Record<string, number> = {}
         for (const submission of this.submissions) {
