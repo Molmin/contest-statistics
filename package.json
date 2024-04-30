@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "build.ts",
   "scripts": {
-    "build": "tsc && node build.js",
-    "crawl": "tsc && node crawl.js"
+    "build": "tsc && node build.js"
   },
   "keywords": [
     "contest",
