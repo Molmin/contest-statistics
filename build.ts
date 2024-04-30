@@ -19,7 +19,6 @@ const contests: Record<string, Contest> = {}
 for (const id of contestIds) contests[id] = new Contest(`data/${id}.csv`)
 
 writeFileSync('dist/result.typ', [
-    render('header.typ', {}),
     render('summary.typ', {
         ...Object.fromEntries(contestIds.map((id) => [`${id}.user_count`, contests[id].user_count])),
         ...Object.fromEntries(getYear(2024)
@@ -45,4 +44,4 @@ writeFileSync('dist/result.typ', [
         ...Object.fromEntries([2024, 2023].map((year) => [`${year}.judge_wait`, range(0, 180)
             .map((i) => (average(getYear(year).flatMap((id) => contests[id].submissions.filter((doc) => contest_startTime[year] + (i - 10) * 60 * 1000 <= doc.submitTime && doc.submitTime <= contest_startTime[year] + i * 60 * 1000).map((doc) => doc.judgeTime - doc.submitTime))) / 1000).toFixed(2)).join(', ')])),
     }),
-].join('\n'))
+].join('\n#pagebreak()\n\n'))
