@@ -61,6 +61,7 @@ writeFileSync('dist/result.typ', [
                 ...Object.fromEntries(submission_status.map((status) => [`rate_${status}`, (contest.count_submission((doc) => doc.status === status) / contest.count_submission(() => true) * 100).toFixed(0)])),
                 max_score: contest.getScoreTransformation((a: number[]) => Math.max(...a, 0, 0)).join(', '),
                 average_score: contest.getScoreTransformation((a: number[]) => +average(a).toFixed(2)).join(', '),
+                score_distribution: contest.getScoreDistribution().map((line) => `  ${line.map((column) => `[${column}]`).join(', ')}`).join('\n'),
             }),
         ]
     })

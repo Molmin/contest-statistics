@@ -66,3 +66,23 @@
     }
   )
 })
+
+各分数段人数分布见下表：
+
+#figure(
+  table(
+    columns: 4,
+    [分数段], [首个达到选手], [首个达到时间], [达到人数],
+{{ score_distribution }}
+  ),
+)
+
+总提交次数排名见下表：
+
+#figure(
+  table(
+    columns: 5,
+    [排名], [选手], [提交次数],
+{{ submission_count_ranking }}
+  ),
+)
