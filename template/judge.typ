@@ -2,7 +2,7 @@
 
 下面展示的是本次比赛所有组别的评测数据。
 
-本次比赛共产生 ${{ count_submission }}$ 次提交，所有代码总长 ${{ submission_code_length }}$ MiB，其中 ${{ count_submission_compile_successfully }}$ 次编译通过，${{ count_submission_ac }}$ 次答案正确，共评测了 ${{ judge_testcase_count }}$ 个测试点，忽略了 ${{ judge_testcase_ignore_count }}$ 个测试点，选手代码运行时间总计 ${{ judge_sum_time }}$ 小时。
+本次比赛共产生 ${{ count_submission }}$ 次提交，所有代码总长 ${{ submission_code_length }}$ MiB，其中 ${{ count_submission_compile_successfully }}$ 次编译通过，${{ count_submission_ac }}$ 次答案正确，共评测了 ${{ judge_testcase_count }}$ 个测试点，忽略了 ${{ judge_testcase_ignore_count }}$ 个测试点，选手代码运行时间总计 ${{ judge_sum_time }}$ 分钟。
 
 本次比赛提交状态分布如下图所示：
 

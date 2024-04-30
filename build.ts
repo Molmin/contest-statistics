@@ -37,7 +37,7 @@ writeFileSync('dist/result.typ', [
         count_submission_ac: sum(getYear(2023).map((id) => contests[id].count_submission((doc) => doc.status === 'AC'))),
         judge_testcase_count: sum(getYear(2023).flatMap((id) => contests[id].submissions.map((doc) => doc.judgedCases))),
         judge_testcase_ignore_count: sum(getYear(2023).flatMap((id) => contests[id].submissions.map((doc) => doc.countCases - doc.judgedCases))),
-        judge_sum_time: (sum(getYear(2023).flatMap((id) => contests[id].submissions.map((doc) => doc.timeUsage))) / 3600).toFixed(2),
+        judge_sum_time: (sum(getYear(2023).flatMap((id) => contests[id].submissions.map((doc) => doc.timeUsage))) / 60 / 1000).toFixed(2),
         ...Object.fromEntries(submission_status.map((status) => [`count_${status}`, sum(getYear(2023).map((id) => contests[id].count_submission((doc) => doc.status === status)))])),
         ...Object.fromEntries(submission_status.map((status) => [`rate_${status}`, (sum(getYear(2023).map((id) => (contests[id].count_submission((doc) => doc.status === status)))) / sum(getYear(2023).map((id) => contests[id].count_submission(() => true))) * 100).toFixed(0)])),
         ...Object.fromEntries([2024, 2023].map((year) => [`${year}.judge_count`, range(0, 180)
@@ -66,7 +66,7 @@ writeFileSync('dist/result.typ', [
                 count_submission_ac: contest.count_submission((doc) => doc.status === 'AC'),
                 judge_testcase_count: sum(contest.submissions.map((doc) => doc.judgedCases)),
                 judge_testcase_ignore_count: sum(contest.submissions.map((doc) => doc.countCases - doc.judgedCases)),
-                judge_sum_time: (sum(contest.submissions.map((doc) => doc.timeUsage)) / 3600).toFixed(2),
+                judge_sum_time: (sum(contest.submissions.map((doc) => doc.timeUsage)) / 60 / 1000).toFixed(2),
                 ...Object.fromEntries(submission_status.map((status) => [`count_${status}`, contest.count_submission((doc) => doc.status === status)])),
                 ...Object.fromEntries(submission_status.map((status) => [`rate_${status}`, (contest.count_submission((doc) => doc.status === status) / contest.count_submission(() => true) * 100).toFixed(0)])),
                 max_score: max_score.join(', '),
