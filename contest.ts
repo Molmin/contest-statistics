@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs'
+import { sum } from './utils'
 
 export interface Problem {
     id: string
@@ -65,5 +66,23 @@ export class Contest {
 
     count_submission(fn: (submission: Submission) => boolean) {
         return this.submissions.filter(fn).length
+    }
+
+    getScoreTransformation(fn: (scores: number[]) => number) {
+        const score: Record<string, Record<string, number>> = {}
+        const result: number[] = []
+        for (let i = 0, j = 0; i < (this.end_time - this.start_time) / (60 * 1000); i++) {
+            while (j < this.submissions.length && this.submissions[j].submitTime <= this.start_time + i * 60 * 1000) {
+                const submission = this.submissions[j]
+                if (!score[submission.submitter]) score[submission.submitter] = {}
+                score[submission.submitter][submission.problem] = Math.max(
+                    score[submission.submitter][submission.problem] || 0,
+                    submission.score,
+                )
+                j++
+            }
+            result.push(fn(Object.entries(score).map((doc) => sum(Object.entries(doc[1]).map((x) => x[1])))))
+        }
+        return result
     }
 }
