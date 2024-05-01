@@ -49,7 +49,7 @@ export class Contest {
                     score: +values[2],
                     status: values[3],
                     submitTime: +values[4],
-                    judgeTime: +values[5],
+                    judgeTime: this.problems.filter((problem) => problem.id === values[1])[0].title === '海亮学生人脉很广' ? +values[4] : +values[5],
                     codeSize: +values[6],
                     maxMemory: +values[7],
                     maxTime: +values[8],
@@ -62,6 +62,7 @@ export class Contest {
         for (const submission of this.submissions) {
             users.add(submission.submitter)
         }
+        this.submissions = this.submissions.sort((x, y) => x.submitTime - y.submitTime)
         this.users = Array.from(users)
         this.user_count = users.size
     }
@@ -71,7 +72,7 @@ export class Contest {
     }
     get scoreGrad() {
         const full = sum(this.problems.map((problem) => problem.full_score))
-        return full > 5000 ? 1000 : 100
+        return full > 5000 ? 2000 : 100
     }
 
     count_submission(fn: (submission: Submission) => boolean) {
